@@ -61,6 +61,8 @@ flowchart LR
 
 ## Setup
 
+Releases up to v0.7.0 are published as `ghcr.io/motwok/npm-switchyard`.
+
 ### 1. A key pair per agent
 
 As with WireGuard, each agent has a private key and gives its public key to its partners:
