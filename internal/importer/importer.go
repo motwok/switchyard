@@ -67,6 +67,7 @@ type Importer struct {
 	selfID    string
 	networkID string
 	network   string
+	localName string // also routes to local (NAM-8)
 
 	mu        sync.Mutex
 	table     *Table
@@ -156,6 +157,7 @@ func Setup(ctx context.Context, dc *docker.Client, selfID string, cfg *config.Co
 		selfID:    self.ID,
 		networkID: ep.NetworkID,
 		network:   cfg.ImportNetwork,
+		localName: cfg.LocalName,
 	}
 	servers, skipped := ExtServers("/etc/resolv.conf", nw.EnableIPv6)
 	log.Debug("upstream dns", "servers", servers, "skipped", skipped)
@@ -423,7 +425,7 @@ func (im *Importer) resolve(qn string) (e *Entry, isNew bool, reason string) {
 	if !ok {
 		return nil, false, "not a valid switchyard name"
 	}
-	if !im.open.Known(n.Partner) {
+	if !im.open.Known(im.partner(n)) {
 		return nil, false, "unknown partner"
 	}
 	key := n.String()
@@ -576,7 +578,7 @@ func (im *Importer) serveTCP(c net.Conn, n names.Name, port int) {
 	ctx := context.Background()
 	start := time.Now()
 	log := im.log.With("dns", n.String(), "port", port, "proto", "tcp", "client", c.RemoteAddr())
-	s, st, err := im.open.Open(ctx, n.Partner, im.target(n, port, wire.TCP))
+	s, st, err := im.open.Open(ctx, im.partner(n), im.target(n, port, wire.TCP))
 	if err != nil || st != wire.StatusOK {
 		if s != nil {
 			log = log.With("stream", streamID(s))
@@ -594,15 +596,15 @@ func (im *Importer) serveTCP(c net.Conn, n names.Name, port int) {
 		log.Debug("stream closed", "duration", time.Since(start).Round(time.Millisecond),
 			"bytes_in", bytes.In.Load(), "bytes_out", bytes.Out.Load())
 	}()
-	if n.Partner == config.LocalPartner {
+	if im.partner(n) == config.LocalPartner {
 		peer.Pipe(c, s, bytes.Add)
 		return
 	}
-	im.met.StreamResult(n.Partner, "ok", metrics.Target{})
-	im.met.StreamStarted(n.Partner, metrics.Target{})
-	defer im.met.StreamEnded(n.Partner, metrics.Target{})
+	im.met.StreamResult(im.partner(n), "ok", metrics.Target{})
+	im.met.StreamStarted(im.partner(n), metrics.Target{})
+	defer im.met.StreamEnded(im.partner(n), metrics.Target{})
 	peer.Pipe(c, s, func(dir string, b int64) {
-		im.met.AddBytes(n.Partner, dir, metrics.Target{}, b)
+		im.met.AddBytes(im.partner(n), dir, metrics.Target{}, b)
 		bytes.Add(dir, b)
 	})
 }
@@ -610,14 +612,14 @@ func (im *Importer) serveTCP(c net.Conn, n names.Name, port int) {
 // countRefused counts a refused or failed stream on the importing side (MET-2); local
 // streams are counted by the exporter.
 func (im *Importer) countRefused(n names.Name, err error) {
-	if n.Partner == config.LocalPartner {
+	if im.partner(n) == config.LocalPartner {
 		return
 	}
 	res := "refused"
 	if err != nil {
 		res = "error"
 	}
-	im.met.StreamResult(n.Partner, res, metrics.Target{})
+	im.met.StreamResult(im.partner(n), res, metrics.Target{})
 }
 
 func (im *Importer) reset(c net.Conn) {
@@ -687,23 +689,23 @@ func (im *Importer) flowSend(f *udpFlow, n names.Name, pkt []byte) {
 // flowWrite sends one datagram on an open flow; a failed send ends the flow. Caller holds f.mu.
 func (im *Importer) flowWrite(f *udpFlow, n names.Name, pkt []byte) {
 	f.idle.Touch()
-	if err := im.writeUDP(f.s, n.Partner == config.LocalPartner, pkt); err != nil {
+	if err := im.writeUDP(f.s, im.partner(n) == config.LocalPartner, pkt); err != nil {
 		f.s.Close() // the reader ends and removes the flow
 		f.dead = true
 		return
 	}
 	f.bytes.Add("out", int64(len(pkt)))
-	if n.Partner != config.LocalPartner {
-		im.met.AddBytes(n.Partner, "out", metrics.Target{}, int64(len(pkt)))
+	if im.partner(n) != config.LocalPartner {
+		im.met.AddBytes(im.partner(n), "out", metrics.Target{}, int64(len(pkt)))
 	}
 }
 
 // runFlow opens the flow's stream, sends what waited and relays replies until the flow ends.
 func (im *Importer) runFlow(u *net.UDPConn, n names.Name, port int, from netip.AddrPort, f *udpFlow, remove func()) {
-	local := n.Partner == config.LocalPartner
+	local := im.partner(n) == config.LocalPartner
 	start := time.Now()
 	log := im.log.With("dns", n.String(), "port", port, "proto", "udp", "client", from)
-	s, st, err := im.open.Open(context.Background(), n.Partner, im.target(n, port, wire.UDP))
+	s, st, err := im.open.Open(context.Background(), im.partner(n), im.target(n, port, wire.UDP))
 	if err != nil || st != wire.StatusOK {
 		if s != nil {
 			log = log.With("stream", streamID(s))
@@ -721,8 +723,8 @@ func (im *Importer) runFlow(u *net.UDPConn, n names.Name, port int, from netip.A
 	log.Debug("stream opened")
 	idle := peer.WatchIdle(s)
 	if !local {
-		im.met.StreamResult(n.Partner, "ok", metrics.Target{})
-		im.met.StreamStarted(n.Partner, metrics.Target{})
+		im.met.StreamResult(im.partner(n), "ok", metrics.Target{})
+		im.met.StreamStarted(im.partner(n), metrics.Target{})
 	}
 	f.mu.Lock()
 	f.s, f.idle, f.bytes = s, idle, &peer.Bytes{}
@@ -742,7 +744,7 @@ func (im *Importer) runFlow(u *net.UDPConn, n names.Name, port int, from netip.A
 		f.mu.Unlock()
 		remove()
 		if !local {
-			im.met.StreamEnded(n.Partner, metrics.Target{})
+			im.met.StreamEnded(im.partner(n), metrics.Target{})
 		}
 		log.Debug("stream closed", "duration", time.Since(start).Round(time.Millisecond),
 			"bytes_in", f.bytes.In.Load(), "bytes_out", f.bytes.Out.Load())
@@ -759,7 +761,7 @@ func (im *Importer) runFlow(u *net.UDPConn, n names.Name, port int, from netip.A
 		}
 		f.bytes.Add("in", int64(m))
 		if !local {
-			im.met.AddBytes(n.Partner, "in", metrics.Target{}, int64(m))
+			im.met.AddBytes(im.partner(n), "in", metrics.Target{}, int64(m))
 		}
 	}
 }
@@ -778,4 +780,12 @@ func (im *Importer) writeUDP(s net.Conn, local bool, p []byte) error {
 		return err
 	}
 	return wire.WriteDatagram(s, p)
+}
+
+// partner is where a name routes: local_name is the agent itself (NAM-8).
+func (im *Importer) partner(n names.Name) string {
+	if n.Partner == im.localName {
+		return config.LocalPartner
+	}
+	return n.Partner
 }
