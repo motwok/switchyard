@@ -38,6 +38,7 @@ services:
         log_level: debug
         import_network: sy-it_imp
         local_host: true
+        local_name: hosta
         private_key: "9Ktfb/WqyMKethZfu/jDpSVsAgFgwA7LGmggx6scHrk="
         partners:
           - name: b
