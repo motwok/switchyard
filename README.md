@@ -66,7 +66,7 @@ flowchart LR
 As with WireGuard, each agent has a private key and gives its public key to its partners:
 
 ```sh
-docker run --rm ghcr.io/motwok/switchyard genkey
+docker run --rm ghcr.io/motwok/npm-switchyard genkey
 ```
 
 `genkey` prints both keys (`private_key: ...`, `public_key: ...`). `pubkey <private key>` prints the
@@ -85,7 +85,7 @@ therefore reachable too.
 ```yaml
 services:
   switchyard:
-    image: ghcr.io/motwok/switchyard:latest
+    image: ghcr.io/motwok/npm-switchyard:latest
     restart: unless-stopped
     environment:
       SWITCHYARD_CONFIG: |
@@ -118,7 +118,7 @@ a Windows host only exports and needs no import network.
 ```yaml
 services:
   switchyard:
-    image: ghcr.io/motwok/switchyard:latest
+    image: ghcr.io/motwok/npm-switchyard:latest
     restart: unless-stopped
     cap_add: [NET_ADMIN]
     environment:
@@ -189,7 +189,7 @@ In Nginx Proxy Manager set the forward host to `nextcloud.8080.hostb.switchyard`
 ```yaml
 services:
   switchyard:
-    image: ghcr.io/motwok/switchyard:latest
+    image: ghcr.io/motwok/npm-switchyard:latest
     restart: unless-stopped
     environment:
       SWITCHYARD_CONFIG: |
