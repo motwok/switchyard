@@ -10,9 +10,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/motwok/npm-switchyard/internal/config"
-	"github.com/motwok/npm-switchyard/internal/docker"
-	"github.com/motwok/npm-switchyard/internal/docker/dockertest"
+	"github.com/motwok/switchyard/internal/config"
+	"github.com/motwok/switchyard/internal/docker"
+	"github.com/motwok/switchyard/internal/docker/dockertest"
 )
 
 // The importer is set up, but its DNS server cannot bind port 53 as a normal user: the

@@ -7,9 +7,9 @@ import (
 	"errors"
 	"log/slog"
 
-	"github.com/motwok/npm-switchyard/internal/config"
-	"github.com/motwok/npm-switchyard/internal/docker"
-	"github.com/motwok/npm-switchyard/internal/metrics"
+	"github.com/motwok/switchyard/internal/config"
+	"github.com/motwok/switchyard/internal/docker"
+	"github.com/motwok/switchyard/internal/metrics"
 )
 
 // Importer is Linux only in 1.0 (SC-3).

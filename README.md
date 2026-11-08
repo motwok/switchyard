@@ -1,10 +1,10 @@
-# npm-switchyard
+# switchyard
 
-[![Build](https://github.com/motwok/npm-switchyard/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/motwok/npm-switchyard/actions/workflows/build.yml)
-[![Coverage](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fmotwok%2Fnpm-switchyard%2Fbadges%2Fcoverage.json)](https://github.com/motwok/npm-switchyard/actions/workflows/build.yml)
-[![Release](https://img.shields.io/github/v/release/motwok/npm-switchyard)](https://github.com/motwok/npm-switchyard/releases/latest)
-[![License](https://img.shields.io/github/license/motwok/npm-switchyard)](LICENSE)
-[![Go](https://img.shields.io/github/go-mod/go-version/motwok/npm-switchyard)](go.mod)
+[![Build](https://github.com/motwok/switchyard/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/motwok/switchyard/actions/workflows/build.yml)
+[![Coverage](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fmotwok%2Fswitchyard%2Fbadges%2Fcoverage.json)](https://github.com/motwok/switchyard/actions/workflows/build.yml)
+[![Release](https://img.shields.io/github/v/release/motwok/switchyard)](https://github.com/motwok/switchyard/releases/latest)
+[![License](https://img.shields.io/github/license/motwok/switchyard)](LICENSE)
+[![Go](https://img.shields.io/github/go-mod/go-version/motwok/switchyard)](go.mod)
 
 Reach containers on other Docker hosts from Nginx Proxy Manager (or any other container) without
 publishing their ports.
@@ -66,7 +66,7 @@ flowchart LR
 As with WireGuard, each agent has a private key and gives its public key to its partners:
 
 ```sh
-docker run --rm ghcr.io/motwok/npm-switchyard genkey
+docker run --rm ghcr.io/motwok/switchyard genkey
 ```
 
 `genkey` prints both keys (`private_key: ...`, `public_key: ...`). `pubkey <private key>` prints the
@@ -85,7 +85,7 @@ therefore reachable too.
 ```yaml
 services:
   switchyard:
-    image: ghcr.io/motwok/npm-switchyard:latest
+    image: ghcr.io/motwok/switchyard:latest
     restart: unless-stopped
     environment:
       SWITCHYARD_CONFIG: |
@@ -118,7 +118,7 @@ a Windows host only exports and needs no import network.
 ```yaml
 services:
   switchyard:
-    image: ghcr.io/motwok/npm-switchyard:latest
+    image: ghcr.io/motwok/switchyard:latest
     restart: unless-stopped
     cap_add: [NET_ADMIN]
     environment:
@@ -189,7 +189,7 @@ In Nginx Proxy Manager set the forward host to `nextcloud.8080.hostb.switchyard`
 ```yaml
 services:
   switchyard:
-    image: ghcr.io/motwok/npm-switchyard:latest
+    image: ghcr.io/motwok/switchyard:latest
     restart: unless-stopped
     environment:
       SWITCHYARD_CONFIG: |
@@ -209,7 +209,7 @@ If the partner dials this host, publish the port (`ports: ["9481:9481"]`) and al
 firewall:
 
 ```powershell
-New-NetFirewallRule -DisplayName "npm-switchyard" -Direction Inbound -Protocol TCP -LocalPort 9481 -Action Allow
+New-NetFirewallRule -DisplayName "switchyard" -Direction Inbound -Protocol TCP -LocalPort 9481 -Action Allow
 ```
 
 ### The Docker host
@@ -285,7 +285,7 @@ side, once its DNS server listens. A disconnected partner does not make it unhea
 
 ## Support Me
 
-If npm-switchyard helps you, you can support it: [Buy Me a Coffee](https://ko-fi.com/motwok)
+If switchyard helps you, you can support it: [Buy Me a Coffee](https://ko-fi.com/motwok)
 
 ## License
 

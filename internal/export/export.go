@@ -15,10 +15,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/motwok/npm-switchyard/internal/config"
-	"github.com/motwok/npm-switchyard/internal/docker"
-	"github.com/motwok/npm-switchyard/internal/metrics"
-	"github.com/motwok/npm-switchyard/internal/wire"
+	"github.com/motwok/switchyard/internal/config"
+	"github.com/motwok/switchyard/internal/docker"
+	"github.com/motwok/switchyard/internal/metrics"
+	"github.com/motwok/switchyard/internal/wire"
 )
 
 // connectTimeout bounds the Docker re-check and the dial of a target; a variable for tests.

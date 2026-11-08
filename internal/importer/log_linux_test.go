@@ -14,7 +14,7 @@ import (
 
 	"github.com/miekg/dns"
 
-	"github.com/motwok/npm-switchyard/internal/npmconf"
+	"github.com/motwok/switchyard/internal/npmconf"
 )
 
 func (l *logBuf) waitFor(t *testing.T, lines ...string) {

@@ -1,7 +1,7 @@
 # Changelog
 
 The full, per-version changelog lives on the
-**[Releases page](https://github.com/motwok/npm-switchyard/releases)**.
+**[Releases page](https://github.com/motwok/switchyard/releases)**.
 
 Every merge into `master` that changes the image is a release. Its notes are compiled **automatically**
 from the merged pull requests by Release Drafter, grouped into **Features**, **Bug Fixes**,

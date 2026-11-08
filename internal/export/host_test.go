@@ -6,10 +6,10 @@ import (
 	"io"
 	"testing"
 
-	"github.com/motwok/npm-switchyard/internal/config"
-	"github.com/motwok/npm-switchyard/internal/docker"
-	"github.com/motwok/npm-switchyard/internal/docker/dockertest"
-	"github.com/motwok/npm-switchyard/internal/wire"
+	"github.com/motwok/switchyard/internal/config"
+	"github.com/motwok/switchyard/internal/docker"
+	"github.com/motwok/switchyard/internal/docker/dockertest"
+	"github.com/motwok/switchyard/internal/wire"
 )
 
 func hostOn(n string) bool { return true }

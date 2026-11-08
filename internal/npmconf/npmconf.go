@@ -9,7 +9,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/motwok/npm-switchyard/internal/names"
+	"github.com/motwok/switchyard/internal/names"
 )
 
 var (

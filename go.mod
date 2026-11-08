@@ -1,4 +1,4 @@
-module github.com/motwok/npm-switchyard
+module github.com/motwok/switchyard
 
 go 1.27.3
 

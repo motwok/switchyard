@@ -9,8 +9,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/motwok/npm-switchyard/internal/docker"
-	"github.com/motwok/npm-switchyard/internal/docker/dockertest"
+	"github.com/motwok/switchyard/internal/docker"
+	"github.com/motwok/switchyard/internal/docker/dockertest"
 )
 
 func TestClient(t *testing.T) {
