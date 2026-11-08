@@ -189,7 +189,8 @@ func TestForwardFailure(t *testing.T) {
 
 func TestTCPAndUDPStreams(t *testing.T) {
 	im := newImporter(t)
-	for _, p := range []string{"b", "local"} { // partner stream and own host
+	im.localName = "self"
+	for _, p := range []string{"b", "local", "self"} { // partner stream, own host, local_name
 		port := freePort(t)
 		query(im, "web."+strconv.Itoa(port)+"."+p+".switchyard", dns.TypeA)
 		addr := "127.0.0.1:" + strconv.Itoa(port)

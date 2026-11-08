@@ -59,12 +59,21 @@ func TestInvalid(t *testing.T) {
 		"log level":        head + "log_level: loud\n",
 		"bad log_throttle": head + "log_throttle: soon\n",
 		"neg log_throttle": head + "log_throttle: -1s\n",
+		"bad local_name":   head + "local_name: local\n",
+		"local_name used":  head + "local_name: a\npartners:\n  - name: a\n    public_key: " + peer + "\n",
 		"neg spares":       head + "partners:\n  - name: a\n    public_key: " + peer + "\n    spares: -1\n",
 	}
 	for name, y := range cases {
 		if _, err := Parse([]byte(y)); err == nil {
 			t.Errorf("%s: no error", name)
 		}
+	}
+}
+
+func TestLocalName(t *testing.T) {
+	c, err := Parse([]byte(head + "local_name: HostA\n"))
+	if err != nil || c.LocalName != "hosta" {
+		t.Fatal(c, err)
 	}
 }
 

@@ -54,6 +54,9 @@ flowchart LR
 - `<container>` is any name Docker's own DNS would answer for that container in a network it shares
   with the agent: container name, compose service name and other aliases, short ID, hostname, also as
   `<name>.<network>`. Case does not matter.
+- `local_name` gives the own host a second name besides `local`: with `local_name: hostb`,
+  `nextcloud.8080.hostb.switchyard` reaches the agent's own host. So Nginx Proxy Manager can be mirrored
+  or moved to hostb without changing its forward hosts.
 - Several containers under one name (e.g. a scaled service): each connection goes to one of them.
 - `host` is the Docker host itself where `host: true` is set (see [The Docker host](#the-docker-host));
   elsewhere it is an ordinary container name.
@@ -249,6 +252,7 @@ over `-config`: the health check reads the configuration the same way and does n
 | `partners[].spares` | `2` | idle authenticated connections kept ready by the dialing side |
 | `partners[].networks.include` | all | networks whose containers this partner may reach (`*` wildcard) |
 | `partners[].networks.exclude` | none | networks this partner may not reach; wins over `include` |
+| `local_name` | none | additional name for `local`, a DNS label, not a partner name |
 | `local_networks.include` / `.exclude` | all / none | the same for `local` names |
 | `host` | `false` | export the Docker host as `host` |
 | `partners[].host` | `host` | the same for this partner only |

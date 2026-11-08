@@ -69,6 +69,7 @@ type Config struct {
 	LogTime       bool      `yaml:"log_time"`
 	LogThrottle   Duration  `yaml:"log_throttle"`
 	PrivateKey    string    `yaml:"private_key"`
+	LocalName     string    `yaml:"local_name"` // additional name for local (NAM-8)
 	LocalNetworks Networks  `yaml:"local_networks"`
 	Host          bool      `yaml:"host"`
 	LocalHost     *bool     `yaml:"local_host"`
@@ -153,6 +154,10 @@ func (c *Config) validate() error {
 	if c.HostAddress != "" && net.ParseIP(c.HostAddress) == nil {
 		return fmt.Errorf("host_address %q: not an IP address", c.HostAddress)
 	}
+	c.LocalName = strings.ToLower(c.LocalName)
+	if c.LocalName != "" && !ValidPartnerName(c.LocalName) {
+		return fmt.Errorf("local_name %q: not a DNS label, a port number or reserved", c.LocalName)
+	}
 	if err := c.LocalNetworks.validate(); err != nil {
 		return fmt.Errorf("local_networks: %w", err)
 	}
@@ -163,6 +168,9 @@ func (c *Config) validate() error {
 		p.Name = strings.ToLower(p.Name)
 		if !ValidPartnerName(p.Name) {
 			return fmt.Errorf("partner %q: not a DNS label, a port number or reserved", p.Name)
+		}
+		if p.Name == c.LocalName {
+			return fmt.Errorf("partner %q: equals local_name", p.Name)
 		}
 		if names[p.Name] {
 			return fmt.Errorf("partner %q: used twice", p.Name)
