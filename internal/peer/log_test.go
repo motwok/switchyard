@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/motwok/npm-switchyard/internal/wire"
+	"github.com/motwok/switchyard/internal/wire"
 )
 
 type logBuf struct {

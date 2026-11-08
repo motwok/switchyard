@@ -275,7 +275,7 @@ func certFor(k ed25519.PrivateKey) (tls.Certificate, error) {
 	serial, _ := rand.Int(rand.Reader, big.NewInt(1<<62))
 	tmpl := &x509.Certificate{
 		SerialNumber: serial,
-		Subject:      pkix.Name{CommonName: "npm-switchyard"},
+		Subject:      pkix.Name{CommonName: "switchyard"},
 		NotBefore:    time.Now().Add(-time.Hour),
 		NotAfter:     time.Now().Add(100 * 365 * 24 * time.Hour),
 		KeyUsage:     x509.KeyUsageDigitalSignature,

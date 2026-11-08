@@ -1,4 +1,4 @@
-// Command switchyard is the npm-switchyard agent.
+// Command switchyard is the switchyard agent.
 package main
 
 import (
@@ -19,14 +19,14 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/motwok/npm-switchyard/internal/config"
-	"github.com/motwok/npm-switchyard/internal/docker"
-	"github.com/motwok/npm-switchyard/internal/export"
-	"github.com/motwok/npm-switchyard/internal/importer"
-	"github.com/motwok/npm-switchyard/internal/logging"
-	"github.com/motwok/npm-switchyard/internal/metrics"
-	"github.com/motwok/npm-switchyard/internal/peer"
-	"github.com/motwok/npm-switchyard/internal/wire"
+	"github.com/motwok/switchyard/internal/config"
+	"github.com/motwok/switchyard/internal/docker"
+	"github.com/motwok/switchyard/internal/export"
+	"github.com/motwok/switchyard/internal/importer"
+	"github.com/motwok/switchyard/internal/logging"
+	"github.com/motwok/switchyard/internal/metrics"
+	"github.com/motwok/switchyard/internal/peer"
+	"github.com/motwok/switchyard/internal/wire"
 )
 
 var version = "dev"

@@ -7,7 +7,7 @@ import (
 	"net/netip"
 	"time"
 
-	"github.com/motwok/npm-switchyard/internal/docker"
+	"github.com/motwok/switchyard/internal/docker"
 )
 
 // watchMembers follows containers joining the import network: a fixed address outside

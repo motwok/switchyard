@@ -10,7 +10,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/motwok/npm-switchyard/internal/docker"
+	"github.com/motwok/switchyard/internal/docker"
 )
 
 // Fake is an in-process Docker API for tests: containers, networks and an event stream.

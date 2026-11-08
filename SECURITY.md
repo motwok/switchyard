@@ -1,6 +1,6 @@
 # Security Policy
 
-npm-switchyard reads the Docker API, accepts authenticated connections from partner hosts, answers DNS
+switchyard reads the Docker API, accepts authenticated connections from partner hosts, answers DNS
 queries and forwards TCP and UDP traffic between hosts. That makes it security-sensitive by nature, and
 reports are taken seriously.
 
@@ -12,7 +12,7 @@ security problem.**
 Use **GitHub's private vulnerability reporting**:
 
 1. Go to the repository's **Security** tab ->
-   **[Report a vulnerability](https://github.com/motwok/npm-switchyard/security/advisories/new)**.
+   **[Report a vulnerability](https://github.com/motwok/switchyard/security/advisories/new)**.
 2. Describe the issue with enough detail to reproduce and assess it.
 
 This keeps the report private between you and the maintainer and integrates with GitHub Security
@@ -54,7 +54,7 @@ to review updates first, pin a version tag instead of `:latest`. Details and mit
 
 ## Scope
 
-npm-switchyard deliberately does things that can look alarming but are by design:
+switchyard deliberately does things that can look alarming but are by design:
 
 - it mounts the **Docker socket** (Linux) or the **Docker named pipe** (Windows) and uses the Docker API
   read-only to find the containers that share a network with it,

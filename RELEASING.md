@@ -1,6 +1,6 @@
-# Releasing npm-switchyard
+# Releasing switchyard
 
-npm-switchyard is released as a container image with
+switchyard is released as a container image with
 [Semantic Versioning](https://semver.org) (0.x before 1.0). **Every merge into `master` that changes the
 image is a release**. Merges that only touch documentation or CI build nothing new; they are listed in
 the next real release. There is no manual release step: merging a pull request is the approval.
@@ -71,7 +71,7 @@ regularly, you get it without doing anything.
 What limits that risk:
 
 - Dependabot checks **daily**, but waits **3 days** after a new version appears before proposing it
-  (cooldown), so a compromised release that is found and pulled quickly never reaches npm-switchyard. Security updates
+  (cooldown), so a compromised release that is found and pulled quickly never reaches switchyard. Security updates
   for known vulnerabilities are not delayed.
 - Build images are pinned and only change through a reviewed-by-CI pull request.
 - No release without a green build and smoke test.
@@ -86,6 +86,6 @@ Version tags are never rebuilt. Pin the deployment to the version tag of an earl
 
 ## Deployment
 
-npm-switchyard only publishes images. Pulling `:latest` and redeploying the container is up to the
+switchyard only publishes images. Pulling `:latest` and redeploying the container is up to the
 deployment, for example a scheduled stack redeploy. No credentials are needed: the repository and the
 image are public.

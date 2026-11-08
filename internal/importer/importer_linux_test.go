@@ -21,13 +21,13 @@ import (
 
 	"github.com/miekg/dns"
 
-	"github.com/motwok/npm-switchyard/internal/config"
-	"github.com/motwok/npm-switchyard/internal/docker"
-	"github.com/motwok/npm-switchyard/internal/docker/dockertest"
-	"github.com/motwok/npm-switchyard/internal/metrics"
-	"github.com/motwok/npm-switchyard/internal/names"
-	"github.com/motwok/npm-switchyard/internal/npmconf"
-	"github.com/motwok/npm-switchyard/internal/wire"
+	"github.com/motwok/switchyard/internal/config"
+	"github.com/motwok/switchyard/internal/docker"
+	"github.com/motwok/switchyard/internal/docker/dockertest"
+	"github.com/motwok/switchyard/internal/metrics"
+	"github.com/motwok/switchyard/internal/names"
+	"github.com/motwok/switchyard/internal/npmconf"
+	"github.com/motwok/switchyard/internal/wire"
 )
 
 // echoOpener connects every stream to a local TCP or UDP echo server.

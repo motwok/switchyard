@@ -7,7 +7,7 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/motwok/npm-switchyard/internal/wire"
+	"github.com/motwok/switchyard/internal/wire"
 )
 
 // UDPIdle closes a flow after this long without traffic in either direction (TRN-3).

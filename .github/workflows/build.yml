@@ -268,12 +268,12 @@ jobs:
           push: true
           provenance: false
           build-args: VERSION=${{ steps.drafter.outputs.resolved_version }}
-          tags: ghcr.io/motwok/npm-switchyard:${{ steps.drafter.outputs.resolved_version }}-linux
+          tags: ghcr.io/motwok/switchyard:${{ steps.drafter.outputs.resolved_version }}-linux
       - name: Windows images and manifest list
         if: steps.changed.outputs.release == 'true'
         env:
           V: ${{ steps.drafter.outputs.resolved_version }}
-          IMG: ghcr.io/motwok/npm-switchyard
+          IMG: ghcr.io/motwok/switchyard
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           GOOS=windows GOARCH=amd64 CGO_ENABLED=0 go build -trimpath -ldflags "-s -w -X main.version=$V" \
@@ -285,9 +285,9 @@ jobs:
           # The index is written through the registry API: Docker on Windows picks the variant
           # by os.version, which buildx and imagetools do not set. Only the version tag here;
           # :latest follows once the smoke tests passed.
-          api=https://ghcr.io/v2/motwok/npm-switchyard
+          api=https://ghcr.io/v2/motwok/switchyard
           tok=$(curl -fsS -u "${{ github.actor }}:$GH_TOKEN" \
-            "https://ghcr.io/token?scope=repository:motwok/npm-switchyard:pull,push" | jq -r .token)
+            "https://ghcr.io/token?scope=repository:motwok/switchyard:pull,push" | jq -r .token)
           get() { curl -fsSL -H "Authorization: Bearer $tok" -H "Accept: $2" "$api/$1"; }
           IDX=application/vnd.oci.image.index.v1+json
           MAN=application/vnd.oci.image.manifest.v1+json
@@ -332,7 +332,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Pushed image starts and answers /metrics
         env:
-          IMG: ghcr.io/motwok/npm-switchyard:${{ needs.release.outputs.version }}
+          IMG: ghcr.io/motwok/switchyard:${{ needs.release.outputs.version }}
         run: |
           docker run -d --name sy -v /var/run/docker.sock:/var/run/docker.sock:ro \
             -e SWITCHYARD_CONFIG='{log_level: debug, private_key: "LLS0gQNA3cdq5h3gg1g/pqIrqUdEdkGu7dJIDQehz10="}' "$IMG"
@@ -372,7 +372,7 @@ jobs:
       - name: Pushed image starts and answers /metrics
         shell: bash
         env:
-          IMG: ghcr.io/motwok/npm-switchyard:${{ needs.release.outputs.version }}
+          IMG: ghcr.io/motwok/switchyard:${{ needs.release.outputs.version }}
         run: |
           docker run -d --name sy --isolation process \
             --mount 'type=npipe,src=\\.\pipe\docker_engine,dst=\\.\pipe\docker_engine' \
@@ -399,9 +399,9 @@ jobs:
           V: ${{ needs.release.outputs.version }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          api=https://ghcr.io/v2/motwok/npm-switchyard
+          api=https://ghcr.io/v2/motwok/switchyard
           tok=$(curl -fsS -u "${{ github.actor }}:$GH_TOKEN" \
-            "https://ghcr.io/token?scope=repository:motwok/npm-switchyard:pull,push" | jq -r .token)
+            "https://ghcr.io/token?scope=repository:motwok/switchyard:pull,push" | jq -r .token)
           IDX=application/vnd.oci.image.index.v1+json
           curl -fsSL -H "Authorization: Bearer $tok" -H "Accept: $IDX" "$api/manifests/$V" > index.json
           curl -fsS -X PUT -H "Authorization: Bearer $tok" -H "Content-Type: $IDX" \

@@ -4,7 +4,7 @@ import (
 	"context"
 	"net"
 
-	"github.com/motwok/npm-switchyard/internal/wire"
+	"github.com/motwok/switchyard/internal/wire"
 )
 
 // Opener opens a stream for a name to a partner or to the agent itself (IMP-9).

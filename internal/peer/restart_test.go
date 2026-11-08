@@ -14,9 +14,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/motwok/npm-switchyard/internal/config"
-	"github.com/motwok/npm-switchyard/internal/metrics"
-	"github.com/motwok/npm-switchyard/internal/wire"
+	"github.com/motwok/switchyard/internal/config"
+	"github.com/motwok/switchyard/internal/metrics"
+	"github.com/motwok/switchyard/internal/wire"
 )
 
 // A restarted partner (new instance ID) replaces the stale channel even when the plain

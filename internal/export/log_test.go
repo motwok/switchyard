@@ -8,8 +8,8 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/motwok/npm-switchyard/internal/docker/dockertest"
-	"github.com/motwok/npm-switchyard/internal/wire"
+	"github.com/motwok/switchyard/internal/docker/dockertest"
+	"github.com/motwok/switchyard/internal/wire"
 )
 
 type logBuf struct {

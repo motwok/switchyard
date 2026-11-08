@@ -9,9 +9,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/motwok/npm-switchyard/internal/config"
-	"github.com/motwok/npm-switchyard/internal/metrics"
-	"github.com/motwok/npm-switchyard/internal/wire"
+	"github.com/motwok/switchyard/internal/config"
+	"github.com/motwok/switchyard/internal/metrics"
+	"github.com/motwok/switchyard/internal/wire"
 )
 
 func TestNotConnected(t *testing.T) {
