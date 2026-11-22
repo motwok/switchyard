@@ -23,7 +23,7 @@ for that Windows version any more.
 
 | Workflow | File | Trigger | What it does |
 |---|---|---|---|
-| **Build** | `build.yml` | PR to `master`, push to `master`, started by the auto-merge, manual | Builds all variants and runs the tests. On `master`, if the image changed since the last release, or when started by hand, it pushes `:X.Y.Z` as one manifest list (Windows entries with `os.version`), smoke-tests the pushed image on every platform GitHub has a runner for, and only then publishes the release `vX.Y.Z` and moves `:latest`. |
+| **Build** | `build.yml` | PR to `master`, push to `master`, started by the auto-merge | Builds all variants and runs the tests. On `master`, if the image changed since the last release, it pushes `:X.Y.Z` as one manifest list (Windows entries with `os.version`), smoke-tests the pushed image on every platform GitHub has a runner for, and only then publishes the release `vX.Y.Z` and moves `:latest`. |
 | **Release Drafter** | `release-drafter.yml` | PR events | Labels pull requests from their Conventional Commit titles. The release notes are written by the release job in **Build**, only when there is a release. |
 | **Dependabot** | `.github/dependabot.yml` | Dependabot schedule | Opens PRs for dependencies and the GitHub Actions used. |
 | **Dependabot auto-merge** | `dependabot-automerge.yml` | daily | Merges the Dependabot PRs whose checks are green and then starts the Build workflow, because a merge made by the workflow token starts no build of its own. |

@@ -23,7 +23,7 @@ jobs:
               --json number,mergeStateStatus --jq '.[] | select(.mergeStateStatus == "CLEAN") | .number'); do
             gh pr merge --repo "$REPO" --squash --delete-branch "$pr" && merged=1
           done
-          [ "$merged" = 0 ] || gh workflow run build.yml --repo "$REPO" --ref master -f force=false
+          [ "$merged" = 0 ] || gh workflow run build.yml --repo "$REPO" --ref master
         env:
           REPO: ${{ github.repository }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

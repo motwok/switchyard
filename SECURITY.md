@@ -46,7 +46,7 @@ update to the newest one.
 
 ## Automatic dependency releases
 
-Dependency updates are merged automatically by Dependabot once the build and the smoke test pass, and
+Dependency updates are merged automatically once their checks pass, and
 **every such merge that changes the image is a release**. Security fixes therefore reach `:latest`
 quickly, but a vulnerable or compromised dependency would be shipped automatically as well. If you want
 to review updates first, pin a version tag instead of `:latest`. Details and mitigations:
