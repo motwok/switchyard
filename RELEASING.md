@@ -23,9 +23,10 @@ for that Windows version any more.
 
 | Workflow | File | Trigger | What it does |
 |---|---|---|---|
-| **Build** | `build.yml` | PR to `master`, push to `master`, manual | Builds all variants and runs the tests. On a push to `master` that changed the image, or when started by hand, it pushes `:X.Y.Z` as one manifest list (Windows entries with `os.version`), smoke-tests the pushed image on every platform GitHub has a runner for, and only then publishes the release `vX.Y.Z` and moves `:latest`. |
+| **Build** | `build.yml` | PR to `master`, push to `master`, started by the auto-merge, manual | Builds all variants and runs the tests. On `master`, if the image changed since the last release, or when started by hand, it pushes `:X.Y.Z` as one manifest list (Windows entries with `os.version`), smoke-tests the pushed image on every platform GitHub has a runner for, and only then publishes the release `vX.Y.Z` and moves `:latest`. |
 | **Release Drafter** | `release-drafter.yml` | PR events | Labels pull requests from their Conventional Commit titles. The release notes are written by the release job in **Build**, only when there is a release. |
-| **Dependabot** | `.github/dependabot.yml` | Dependabot schedule | Opens PRs for dependencies and the GitHub Actions used; they are merged automatically once the build is green. |
+| **Dependabot** | `.github/dependabot.yml` | Dependabot schedule | Opens PRs for dependencies and the GitHub Actions used. |
+| **Dependabot auto-merge** | `dependabot-automerge.yml` | daily | Merges the Dependabot PRs whose checks are green and then starts the Build workflow, because a merge made by the workflow token starts no build of its own. |
 
 ## Release flow
 
@@ -61,8 +62,8 @@ Labels are set automatically from Conventional Commit titles (`feat:`, `fix:`, `
 ## Dependency updates are released automatically
 
 **An update of the toolchain or of a dependency triggers a release on its own** (updates of GitHub
-Actions only touch CI and do not). Dependabot opens the pull request, it is merged automatically once the
-build and the smoke test pass, and the result is a new patch release. If you run `:latest` and redeploy
+Actions only touch CI and do not). Dependabot opens the pull request; once its checks are green, the daily
+auto-merge merges it and starts the build, which releases it as a new patch release. If you run `:latest` and redeploy
 regularly, you get it without doing anything.
 
 > **Risk:** if a dependency is itself vulnerable or compromised, that is shipped automatically as well,
