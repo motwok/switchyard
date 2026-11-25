@@ -6,7 +6,6 @@ import (
 	"context"
 	"errors"
 	"log/slog"
-	"maps"
 	"math/rand/v2"
 	"net"
 	"slices"
@@ -37,7 +36,7 @@ type Exporter struct {
 	importNetwork string // excluded (EXP-1)
 	log           *slog.Logger
 
-	// HostAddress is host_address; empty means the gateway (EXP-7).
+	// HostAddress is host_address; empty means host.docker.internal (EXP-7).
 	HostAddress string
 
 	// Scopes are the partners and "local" with their network filters, for the log (LOG-3).
@@ -358,36 +357,21 @@ const dockerHost = "host.docker.internal"
 // lookupHost resolves dockerHost, /etc/hosts included; a variable for tests.
 var lookupHost = net.DefaultResolver.LookupHost
 
-// hostAddr is host_address, else host.docker.internal, else the gateway; via names the source.
+// hostAddr is host_address, else host.docker.internal; via names the source.
 func (e *Exporter) hostAddr(ctx context.Context) (addr, via string, err error) {
 	if e.HostAddress != "" {
 		return e.HostAddress, "host_address", nil
 	}
-	if addrs, err := lookupHost(ctx, dockerHost); err == nil {
-		for _, a := range addrs {
-			if ip := net.ParseIP(a); ip != nil && ip.To4() != nil {
-				return a, dockerHost, nil
-			}
-		}
-	}
-	addr, err = e.gateway(ctx)
-	return addr, "gateway", err
-}
-
-// gateway is the first IPv4 gateway of the agent's endpoints in name order; the network's
-// IPAM config lacks a gateway Docker picked itself.
-func (e *Exporter) gateway(ctx context.Context) (string, error) {
-	self, err := e.dc.Inspect(ctx, e.selfID)
+	addrs, err := lookupHost(ctx, dockerHost)
 	if err != nil {
-		return "", err
+		return "", "", err
 	}
-	nets := self.NetworkSettings.Networks
-	for _, name := range slices.Sorted(maps.Keys(nets)) {
-		if ip := net.ParseIP(nets[name].Gateway); ip != nil && ip.To4() != nil {
-			return nets[name].Gateway, nil
+	for _, a := range addrs {
+		if ip := net.ParseIP(a); ip != nil && ip.To4() != nil {
+			return a, dockerHost, nil
 		}
 	}
-	return "", errors.New("no IPv4 gateway in the agent's networks")
+	return "", "", errors.New("no IPv4 address for " + dockerHost)
 }
 
 type refConn struct {

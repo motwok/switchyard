@@ -221,9 +221,9 @@ With `host: true` the exporting agent offers the Docker host itself as the pseud
 `host.22.hostb.switchyard` reaches port 22 of `hostb`. Off by default; `partners[].host` overrides it
 per partner, `local_host` for `local` names. Where it is on, `host` always means the Docker host.
 
-- The agent connects to `host_address` if set, else to `host.docker.internal` if that resolves, else
-  to the gateway of one of its networks (e.g. `172.17.0.1`). On Docker Desktop `host.docker.internal`
-  is the PC itself; the gateway there would only reach Docker Desktop's VM. Services bound only to
+- The agent connects to `host_address` if set, else to `host.docker.internal`; if neither is given,
+  `host` is refused. On Docker Desktop `host.docker.internal` is the PC itself; on Linux it needs
+  `extra_hosts: ["host.docker.internal:host-gateway"]` on the agent. Services bound only to
   `127.0.0.1` are not reachable; a service bound only to one address needs that address as
   `host_address`.
 - The connection passes the host firewall: allow the agent's network for those ports, e.g.
@@ -257,7 +257,7 @@ over `-config`: the health check reads the configuration the same way and does n
 | `host` | `false` | export the Docker host as `host` |
 | `partners[].host` | `host` | the same for this partner only |
 | `local_host` | `host` | the same for `local` names |
-| `host_address` | `host.docker.internal`, else gateway | the Docker host's address for `host` |
+| `host_address` | `host.docker.internal` | the Docker host's address for `host` |
 
 ## Monitoring
 
