@@ -21,8 +21,7 @@ func noDockerHost(context.Context, string) ([]string, error) { return nil, error
 
 func TestHostDockerInternal(t *testing.T) {
 	port := target(t)
-	f, e := setup(t)
-	gateways(f, "", "")
+	_, e := setup(t)
 	defer func() { lookupHost = noDockerHost }()
 	lookupHost = func(_ context.Context, name string) ([]string, error) {
 		if name != "host.docker.internal" {
@@ -34,7 +33,7 @@ func TestHostDockerInternal(t *testing.T) {
 	if _, _, st := e.Connect(ctx, wire.Target{Proto: wire.TCP, Port: port, Name: "host"}, hostOn); st != wire.StatusOK {
 		t.Fatalf("status %d", st)
 	}
-	// IPv6 only: the gateway is used, and there is none here.
+	// IPv6 only: no address.
 	lookupHost = func(context.Context, string) ([]string, error) { return []string{"::1"}, nil }
 	if _, _, st := e.Connect(ctx, wire.Target{Proto: wire.TCP, Port: port, Name: "host"}, hostOn); st != wire.StatusNoTarget {
 		t.Fatalf("ipv6 only: status %d", st)
@@ -46,18 +45,10 @@ func TestHostDockerInternal(t *testing.T) {
 	}
 }
 
-func gateways(f *dockertest.Fake, apps, imp string) {
-	f.Set(dockertest.Ctr("self0000000000", "agent", nil, map[string]docker.Endpoint{
-		"apps": {NetworkID: "n-apps", IPAddress: "127.0.0.2", Gateway: apps},
-		"imp":  {NetworkID: "n-imp", IPAddress: "127.0.0.3", Gateway: imp},
-	}))
-}
-
-func TestHostViaGateway(t *testing.T) {
+func TestHostNamedContainer(t *testing.T) {
 	port := target(t)
 	f, e := setup(t)
-	// apps comes first by name; its unusable gateway is skipped.
-	gateways(f, "fe80::1", "127.0.0.1")
+	e.HostAddress = "127.0.0.1"
 	// A container named host does not hide the Docker host.
 	f.Set(dockertest.Ctr("host0000000000", "host", nil,
 		map[string]docker.Endpoint{"apps": {NetworkID: "n-apps", IPAddress: "127.0.0.9", DNSNames: []string{"host"}}}))
@@ -107,16 +98,9 @@ func TestHostRefused(t *testing.T) {
 	if st := try(e, func(n string) bool { return n != config.HostScope }); st != wire.StatusNoTarget {
 		t.Errorf("off: status %d", st)
 	}
-	// No IPv4 gateway.
-	f, e := setup(t)
-	gateways(f, "", "::1")
+	// Neither host_address nor host.docker.internal.
+	_, e = setup(t)
 	if st := try(e, hostOn); st != wire.StatusNoTarget {
-		t.Errorf("no gateway: status %d", st)
-	}
-	// Own container cannot be inspected.
-	f, e = setup(t)
-	f.FailInspect["self0000000000"] = true
-	if st := try(e, hostOn); st != wire.StatusNoTarget {
-		t.Errorf("inspect error: status %d", st)
+		t.Errorf("no address: status %d", st)
 	}
 }

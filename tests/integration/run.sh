@@ -30,11 +30,11 @@ cli curl -fsS --max-time 10 http://localweb.80.local.switchyard/ | grep -q Hostn
 echo "local_name"
 cli curl -fsS --max-time 10 http://localweb.80.hosta.switchyard/ | grep -q Hostname || fail "local_name"
 
-echo "host via host.docker.internal (b) and via the gateway (local)"
+echo "host via host.docker.internal (b), refused without it (local)"
 cli curl -fsS --max-time 10 http://host.18080.b.switchyard:18080/ | grep -q Hostname || fail "host"
 dc logs b | grep "export connected" | grep -q "via=host.docker.internal" || fail "host not via the name"
-cli curl -fsS --max-time 10 http://host.18080.local.switchyard:18080/ | grep -q Hostname || fail "host local"
-dc logs a | grep "export connected" | grep -q "via=gateway" || fail "host not via the gateway"
+if cli curl -fsS --max-time 10 http://host.18080.local.switchyard:18080/ >/dev/null 2>&1; then fail "host without address"; fi
+dc logs a | grep -q "no address for the host" || fail "host refusal not logged"
 
 echo "AAAA for a valid name is NOERROR without data"
 cli dig AAAA web.80.b.switchyard | grep -q "status: NOERROR" || fail "AAAA"
