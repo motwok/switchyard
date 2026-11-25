@@ -13,6 +13,7 @@
 ![Platform](https://img.shields.io/badge/platform-linux%20amd64%20%7C%20arm64%20%7C%20windows-blue)
 [![Image](https://img.shields.io/badge/image-ghcr.io%2Fmotwok%2Fswitchyard-blue?logo=docker&logoColor=white)](https://github.com/motwok/switchyard/pkgs/container/switchyard)
 ![Audience](https://img.shields.io/badge/audience-Docker%20admins-blueviolet)
+![Works with](https://img.shields.io/badge/works%20with-Nginx%20Proxy%20Manager-f15833?logo=nginxproxymanager&logoColor=white)
 ![Use](https://img.shields.io/badge/use-production-brightgreen)
 ![Exposed ports](https://img.shields.io/badge/exposed%20ports-none-brightgreen)
 ![Traffic](https://img.shields.io/badge/traffic-authenticated%20pairs-blue)
@@ -20,8 +21,8 @@
 [![License](https://img.shields.io/github/license/motwok/switchyard)](LICENSE)
 [![Ko-fi](https://img.shields.io/badge/Ko--fi-Support%20Me-ff5e5b?logo=ko-fi&logoColor=white)](https://ko-fi.com/motwok)
 
-Reach containers on other Docker hosts from Nginx Proxy Manager (or any other container) without
-publishing their ports.
+Securely reach containers on other Docker hosts without publishing their ports, from Nginx Proxy
+Manager or any other container.
 
 ## Idea
 
