@@ -1,16 +1,24 @@
 <h1>
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset=".github/logo-dark.svg">
-    <img src=".github/logo.svg" alt="switchyard logo" height="40" align="right">
+    <img src=".github/logo.svg" alt="switchyard logo" width="128" align="right">
   </picture>
-  switchyard
+  switchyard<br clear="right">
 </h1>
 
 [![Build](https://github.com/motwok/switchyard/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/motwok/switchyard/actions/workflows/build.yml)
 [![Coverage](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fmotwok%2Fswitchyard%2Fbadges%2Fcoverage.json)](https://github.com/motwok/switchyard/actions/workflows/build.yml)
 [![Release](https://img.shields.io/github/v/release/motwok/switchyard)](https://github.com/motwok/switchyard/releases/latest)
-[![License](https://img.shields.io/github/license/motwok/switchyard)](LICENSE)
 [![Go](https://img.shields.io/github/go-mod/go-version/motwok/switchyard)](go.mod)
+![Platform](https://img.shields.io/badge/platform-linux%20amd64%20%7C%20arm64%20%7C%20windows-blue)
+[![Image](https://img.shields.io/badge/image-ghcr.io%2Fmotwok%2Fswitchyard-blue?logo=docker&logoColor=white)](https://github.com/motwok/switchyard/pkgs/container/switchyard)
+![Audience](https://img.shields.io/badge/audience-Docker%20admins-blueviolet)
+![Use](https://img.shields.io/badge/use-production-brightgreen)
+![Exposed ports](https://img.shields.io/badge/exposed%20ports-none-brightgreen)
+![Traffic](https://img.shields.io/badge/traffic-authenticated%20pairs-blue)
+![Config](https://img.shields.io/badge/config-zero%20per%20service-blue)
+[![License](https://img.shields.io/github/license/motwok/switchyard)](LICENSE)
+[![Ko-fi](https://img.shields.io/badge/Ko--fi-Support%20Me-ff5e5b?logo=ko-fi&logoColor=white)](https://ko-fi.com/motwok)
 
 Reach containers on other Docker hosts from Nginx Proxy Manager (or any other container) without
 publishing their ports.
