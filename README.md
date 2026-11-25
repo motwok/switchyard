@@ -1,3 +1,8 @@
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/logo-dark.svg">
+  <img src=".github/logo.svg" alt="switchyard logo" width="96" align="right">
+</picture>
+
 # switchyard
 
 [![Build](https://github.com/motwok/switchyard/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/motwok/switchyard/actions/workflows/build.yml)
