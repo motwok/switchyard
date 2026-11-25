@@ -1,9 +1,10 @@
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset=".github/logo-dark.svg">
-  <img src=".github/logo.svg" alt="switchyard logo" width="96" align="right">
-</picture>
-
-# switchyard
+<h1>
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset=".github/logo-dark.svg">
+    <img src=".github/logo.svg" alt="switchyard logo" height="40" align="right">
+  </picture>
+  switchyard
+</h1>
 
 [![Build](https://github.com/motwok/switchyard/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/motwok/switchyard/actions/workflows/build.yml)
 [![Coverage](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fmotwok%2Fswitchyard%2Fbadges%2Fcoverage.json)](https://github.com/motwok/switchyard/actions/workflows/build.yml)
